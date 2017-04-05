@@ -7,6 +7,11 @@
 
 using namespace std;
 
+void quickSortR(int[], int);//быстрая сортировка
+void FillMass(int [], int[], int[], int);  
+int Amount(int arr[], int arr1[], int size);
+
+
 
 int main()
 {
@@ -75,45 +80,109 @@ int main()
 		arr2[i] = rand() % 16+5;
 		cout << setw(4) << arr2[i];
 	}
-	cout << endl;
-	cout << endl;
+	cout << "\n\n";
 	for (int i = 0; i < size1; i++)
 	{
 		arr3[i] = rand() % 16 +5;
 		cout << setw(4) << arr3[i];
 	}
-	cout << endl;
-	cout << endl;
-	//cout << amount;
-	cout << endl;
-	cout << endl;
+	cout << "\n\n\n\n";
 	int *ptr1 = 0;
-	ptr1 = new int[amount1];
-	int j1 = 0;
+	
+	quickSortR(arr2, size1 - 1);
+	quickSortR(arr3, size1 - 1);
+
+	//Вывод отсортированых масивов
+	for (int i = 0; i < size1; i++)	   
+	{
+		cout << setw(4) << arr2[i];
+	}   	 
+	cout << "\n\n";
+
 	for (int i = 0; i < size1; i++)
 	{
-		for (int j = 0; j < size1; j++)
-			if (arr2[i] == arr3[j])
-			{
-				for (int k = j; k >=0; k--)
-					if (arr3[k] == arr3[j])
-					 break; 
-				amount1++;
-			}
+		cout << setw(4) << arr3[i];
 	}
-	cout << amount1;
-	/*for (int i = 0; i <size; i++)
+	cout << "\n\n";
+	
+	amount1 = Amount(arr2, arr3, size1);
+	cout << amount1 << endl;
+
+	ptr1 = new int[amount1];
+	amount1 = Amount(arr2, arr3, size1);//Кол-во повторяющихся элементов
+	
+	FillMass(arr2, arr3, ptr1,size1);	//Заполнение
+
+	for (int i = 0; i < amount1; i++)
 	{
-		if (arr1[i] > 0)
+		cout << setw(4) << ptr1[i];
+	}  
+	cout << "\n\n";
+	delete [] ptr1;	
+}
+
+
+void quickSortR(int a[], int N) {
+	// На входе - массив a[], a[N] - его последний элемент.
+
+	int i = 0, j = N; 		// поставить указатели на исходные места
+	int temp, p;
+
+	p = a[N / 2];		// центральный элемент
+
+						// процедура разделения
+	do {
+		while (a[i] < p) i++;
+		while (a[j] > p) j--;
+
+		if (i <= j) {
+			temp = a[i];
+			a[i] = a[j];
+			a[j] = temp;
+			i++;
+			j--;
+		}
+
+	} while (i <= j);
+
+
+	// рекурсивные вызовы, если есть, что сортировать 
+	if (j > 0) quickSortR(a, j);
+	if (N > i) quickSortR(a + i, N - i);
+}
+
+int Amount(int arr[],int arr1[],int size)
+{
+	int amount = 0;
+	for (int i = 0; i < size; i++)
+	{
+		for (int j = 0; j < size; j++)
 		{
-			ptr[j] = arr1[i];
-			j++;
+
+			if (arr[i] == arr1[j] && arr[i] != arr[i + 1])
+			{
+				amount++;
+				break;
+			}
+		}
+
+	}
+	return amount;
+}
+
+void FillMass(int arr[],int arr1[],int sumA[], int size)
+{
+	int k = 0;
+	for (int i = 0; i < size; i++)
+	{
+		for (int j = 0; j < size; j++)
+		{
+			if (arr[i] == arr1[j] && arr[i] != arr[i + 1])
+			{
+				sumA[k] = arr1[j];
+				k++;
+				break;
+			}
 		}
 	}
-	for (int i = 0; i < amount; i++)
-	{
-		cout << setw(4) << ptr[i];
-	}
-	cout << endl;
-	delete[] ptr;	*/
 }
